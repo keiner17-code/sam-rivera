@@ -11,6 +11,8 @@
   <header>
     <h1>Sam Rivera Clips – Panel de publicación</h1>
     <p>Herramienta interna para publicar clips en TikTok (Login Kit + Content Posting API, Direct Post).</p>
+    <p style="font-size:.85rem;opacity:.75">🔒 <span id="site-url"></span></p>
+    <script>document.getElementById("site-url").textContent = location.origin + location.pathname;</script>
   </header>
 
   <div id="globalErr" class="notice err hidden" role="alert"></div>
