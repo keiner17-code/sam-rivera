@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sam Rivera Clips – Panel de publicación</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Sam Rivera Clips – Panel de publicación</h1>
+    <p>Herramienta interna para publicar clips en TikTok (Login Kit + Content Posting API, Direct Post).</p>
+  </header>
+
+  <div id="globalErr" class="notice err hidden" role="alert"></div>
+
+  <!-- Desconectado -->
+  <section id="viewOut" class="card">
+    <h2>Conecta tu cuenta de TikTok</h2>
+    <p class="muted">Se solicitarán los permisos <code>user.info.basic</code>, <code>video.upload</code> y <code>video.publish</code>. Solo se publica cuando tú lo confirmas.</p>
+    <button id="btnConnect" type="button">Conectar con TikTok</button>
+  </section>
+
+  <!-- Conectado -->
+  <section id="viewIn" class="hidden">
+    <div class="card">
+      <div class="row between">
+        <div class="row">
+          <img id="uAvatar" class="avatar" alt="" hidden>
+          <div>
+            <div id="uName" style="font-weight:700">…</div>
+            <div class="muted">Cuenta TikTok conectada</div>
+          </div>
+        </div>
+        <button id="btnDisconnect" class="secondary" type="button">Desconectar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Publicar en TikTok</h2>
+
+      <div id="creatorBox" class="row" style="margin-bottom:8px">
+        <img id="cAvatar" class="avatar" alt="" hidden>
+        <div>
+          <div class="muted">Publicando en la cuenta:</div>
+          <div id="cName" style="font-weight:700">Consultando creator info…</div>
+        </div>
+      </div>
+      <div id="creatorBlock" class="notice err hidden" role="alert"></div>
+
+      <h3 style="font-size:1rem;margin:12px 0 6px">Vista previa del clip</h3>
+      <video id="preview" src="sample.mp4" controls playsinline preload="metadata"></video>
+      <div class="muted" style="text-align:center;margin-top:4px">Clip de muestra · <span id="vDur">…</span></div>
+      <div id="durErr" class="notice err hidden" role="alert"></div>
+
+      <label class="field" for="caption">Descripción / título (editable)</label>
+      <textarea id="caption" maxlength="2200">La disciplina te lleva a donde la motivación no llega. 💪 #motivacion #mentalidad #disciplina
+
+🎙️ Podcast | Invitado</textarea>
+      <div class="counter"><span id="capCount">0</span>/2200</div>
+
+      <label class="field" for="privacy">Quién puede ver este video</label>
+      <select id="privacy" disabled>
+        <option value="" selected disabled>Selecciona una opción…</option>
+      </select>
+      <div id="privacyNote" class="muted"></div>
+
+      <label class="field">Interacciones permitidas</label>
+      <div class="opt" id="optComment"><input type="checkbox" id="allowComment"><label for="allowComment">Allow Comment (permitir comentarios)</label></div>
+      <div class="opt" id="optDuet"><input type="checkbox" id="allowDuet"><label for="allowDuet">Allow Duet (permitir dúos)</label></div>
+      <div class="opt" id="optStitch"><input type="checkbox" id="allowStitch"><label for="allowStitch">Allow Stitch (permitir stitch)</label></div>
+
+      <label class="field">Commercial content disclosure (divulgación de contenido comercial)</label>
+      <div class="opt" id="optDisclose" title="You need to indicate if your content promotes yourself, a third party, or both.">
+        <input type="checkbox" id="discloseToggle">
+        <label for="discloseToggle">Este contenido promociona a ti mismo, una marca, un producto o un servicio</label>
+      </div>
+      <div id="discloseBox" class="sub hidden">
+        <div class="opt"><input type="checkbox" id="brandOrganic"><label for="brandOrganic">Your brand</label></div>
+        <div class="opt" id="optBranded"><input type="checkbox" id="brandedContent"><label for="brandedContent">Branded content</label></div>
+        <div id="discloseLabel" class="notice"></div>
+        <div id="discloseNeed" class="notice warn hidden">Selecciona al menos una opción para poder publicar.</div>
+      </div>
+
+      <p id="consent" class="consent"></p>
+      <div class="notice">Después de publicar, el contenido puede tardar unos minutos en procesarse y aparecer en tu perfil.</div>
+
+      <button id="btnPublish" type="button" disabled>Publicar</button>
+      <span id="publishHint" class="muted" style="margin-left:8px">Elige quién puede ver el video para habilitar «Publicar».</span>
+    </div>
+
+    <div id="statusCard" class="card hidden">
+      <h2>Estado de la publicación</h2>
+      <ul class="timeline" id="timeline"></ul>
+      <div id="statusMeta" class="muted"></div>
+      <div id="statusResult" class="notice hidden"></div>
+    </div>
+  </section>
+
+  <footer>
+    <a href="../terms.html">Terms of Service</a> · <a href="../privacy.html">Privacy Policy</a>
+    <div>© Sam Rivera</div>
+  </footer>
+</div>
+<script src="config.js"></script>
+<script src="common.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

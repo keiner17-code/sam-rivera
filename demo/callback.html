@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Conectando con TikTok – Sam Rivera Clips</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header><h1>Sam Rivera Clips</h1></header>
+  <div class="card">
+    <h2 id="title">Conectando con TikTok…</h2>
+    <p id="msg" class="muted">Validando la autorización.</p>
+    <div id="err" class="notice err hidden"></div>
+    <p><a id="back" class="hidden" href="index.html">Volver al panel</a></p>
+  </div>
+  <footer><a href="../terms.html">Terms of Service</a> · <a href="../privacy.html">Privacy Policy</a></footer>
+</div>
+<script src="config.js"></script>
+<script src="common.js"></script>
+<script>
+(async function () {
+  const $ = (id) => document.getElementById(id);
+  function showError(text, meta) {
+    $("title").textContent = "No se pudo conectar";
+    $("msg").textContent = "";
+    const box = $("err");
+    box.textContent = text + (meta ? "  [" + meta + "]" : "");
+    box.classList.remove("hidden");
+    $("back").classList.remove("hidden");
+  }
+  const q = new URLSearchParams(location.search);
+  const expected = sessionStorage.getItem(SR.STATE_KEY);
+  sessionStorage.removeItem(SR.STATE_KEY); // un solo uso
+
+  if (q.get("error")) {
+    return showError("TikTok devolvió un error: " + (q.get("error_description") || q.get("error")), "error: " + q.get("error"));
+  }
+  const code = q.get("code");
+  const state = q.get("state");
+  if (!code) return showError("Falta el parámetro code en la respuesta de TikTok.");
+  if (!expected || !state || state !== expected) {
+    return showError("El parámetro state no coincide (posible CSRF o sesión caducada). Vuelve a iniciar la conexión.");
+  }
+  try {
+    const data = await SR.api("/auth/token", { method: "POST", body: { code }, auth: false });
+    SR.Session.set({ access_token: data.access_token, open_id: data.open_id, scope: data.scope, expires_at: data.expires_at });
+    history.replaceState(null, "", "callback.html"); // quita code de la URL
+    location.replace("index.html");
+  } catch (e) {
+    const d = SR.describeError(e);
+    showError(d.text, d.meta);
+  }
+})();
+</script>
+</body>
+</html>
